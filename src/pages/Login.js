@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Login extends React.Component {
   constructor() {
@@ -24,41 +25,61 @@ class Login extends React.Component {
     return nameLength && emailLength;
   };
 
+  handlesSettingsButton = () => {
+    const { history } = this.props;
+    history.push('/settings');
+  };
+
   render() {
     return (
+      <>
+        <form action="">
+          <label htmlFor="name">
+            <input
+              type="text"
+              name="name"
+              data-testid="input-player-name"
+              id="name"
+              onChange={ this.handlesChangeInput }
 
-      <form action="">
-        <label htmlFor="name">
-          <input
-            type="text"
-            name="name"
-            data-testid="input-player-name"
-            id="name"
-            onChange={ this.handlesChangeInput }
+            />
+          </label>
+          <label htmlFor="email">
+            <input
+              type="email"
+              name="email"
+              data-testid="input-gravatar-email"
+              id="email"
+              onChange={ this.handlesChangeInput }
+            />
+          </label>
+          <button
+            type="submit"
+            data-testid="btn-play"
+            disabled={ !this.handlesDisableButton() }
+          >
+            Play
 
-          />
-        </label>
-        <label htmlFor="email">
-          <input
-            type="email"
-            name="email"
-            data-testid="input-gravatar-email"
-            id="email"
-            onChange={ this.handlesChangeInput }
-          />
-        </label>
+          </button>
+        </form>
+
         <button
           type="submit"
-          data-testid="btn-play"
-          disabled={ !this.handlesDisableButton() }
+          data-testid="btn-settings"
+          onClick={ this.handlesSettingsButton }
         >
-          Play
+          Settings
 
         </button>
-      </form>
-
+      </>
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
 
 export default Login;
