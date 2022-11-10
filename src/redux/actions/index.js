@@ -1,4 +1,4 @@
-export const actionCreator = (type, payload) => ({
-  type,
-  payload,
-});
+// export const actionCreator = (type, payload) => ({
+//   type,
+//   payload,
+// });
