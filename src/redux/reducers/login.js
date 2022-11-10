@@ -1,10 +1,12 @@
-// const initialState = {
+const initialState = {
+  email: '',
+};
 
-// };
+const login = (state = initialState, action) => {
+  switch (action.type) {
+  default:
+    return state;
+  }
+};
 
-// const login = (state = initialState, action) => {
-//   switch (action.type) {
-//   }
-// };
-
-// export default login;
+export default login;
