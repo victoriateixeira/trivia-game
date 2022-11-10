@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import md5 from 'crypto-js/md5';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -12,7 +12,7 @@ class Header extends Component {
       <div>
         <img src={ url } alt={ name } data-testid="header-profile-picture" />
         <p data-testid="header-player-name">{ name }</p>
-        <p data-testid="header-score">{ score }</p>
+        <p data-testid="header-score">0</p>
       </div>
     );
   }
@@ -24,8 +24,8 @@ Header.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  name: state.playerReducer.player.name,
-  gravatarEmail: state.playerReducer.player.gravatarEmail,
+  email: state.login.email,
+  name: state.login.name,
 });
 
 export default connect(mapStateToProps)(Header);

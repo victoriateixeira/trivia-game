@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getToken, addPlayer } from '../redux/actions';
 
 class Login extends React.Component {
   constructor() {
@@ -30,6 +32,17 @@ class Login extends React.Component {
     history.push('/settings');
   };
 
+  handleClickPlay = async (event) => {
+    event.preventDefault();
+    const { email, name } = this.state;
+    const { history, loading, dispatch } = this.props;
+    await dispatch(getToken());
+    dispatch(addPlayer({ email, name }));
+    if (!loading) {
+      history.push('/game');
+    }
+  };
+
   render() {
     return (
       <>
@@ -57,6 +70,7 @@ class Login extends React.Component {
             type="submit"
             data-testid="btn-play"
             disabled={ !this.handlesDisableButton() }
+            onClick={ this.handleClickPlay }
           >
             Play
 
@@ -76,10 +90,17 @@ class Login extends React.Component {
   }
 }
 
+const mapStateToProps = ({ game: { loading, token } }) => ({
+  loading,
+  token,
+});
+
 Login.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
-export default Login;
+export default connect(mapStateToProps)(Login);
