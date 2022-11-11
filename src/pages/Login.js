@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getToken } from '../redux/actions';
+import { getToken, addPlayer } from '../redux/actions';
 
 class Login extends React.Component {
   constructor() {
@@ -34,8 +34,10 @@ class Login extends React.Component {
 
   handleClickPlay = async (event) => {
     event.preventDefault();
+    const { email, name } = this.state;
     const { history, loading, dispatch } = this.props;
     await dispatch(getToken());
+    dispatch(addPlayer({ email, name }));
     if (!loading) {
       history.push('/game');
     }

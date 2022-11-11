@@ -2,6 +2,7 @@ export const REQUEST_TOKEN = 'REQUEST_TOKEN';
 export const SAVE_TOKEN = 'SAVE_TOKEN';
 export const SAVE_QUESTIONS = 'SAVE_QUESTIONS';
 export const SAVE_EMAIL = 'SAVE_EMAIL';
+export const ADD_PLAYER_DATA = 'ADD_PLAYER_DATA';
 
 export const actionCreator = (type, payload) => ({
   type,
@@ -31,5 +32,13 @@ export function getQuestions() {
     dispatch(actionCreator(SAVE_QUESTIONS, questionsList));
     dispatch(actionCreator(REQUEST_TOKEN, false));
     return questionsList;
-  };
+      };
 }
+
+export function addPlayer(player) {
+  return {
+    type: ADD_PLAYER_DATA,
+    player,
+      };
+}
+
