@@ -32,13 +32,12 @@ export function getQuestions() {
     dispatch(actionCreator(SAVE_QUESTIONS, questionsList));
     dispatch(actionCreator(REQUEST_TOKEN, false));
     return questionsList;
-      };
+  };
 }
 
 export function addPlayer(player) {
   return {
     type: ADD_PLAYER_DATA,
     player,
-      };
+  };
 }
-

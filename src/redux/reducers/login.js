@@ -1,8 +1,4 @@
-
-import { SAVE_EMAIL } from '../actions';
-
-import { ADD_PLAYER_DATA } from '../actions';
-
+import { ADD_PLAYER_DATA, SAVE_EMAIL } from '../actions';
 
 const initialState = {
   name: '',

@@ -1,9 +1,8 @@
-
 import React, { Component } from 'react';
-import Header from '../components/Header';
-import logo from '../trivia.png';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Header from '../components/Header';
+import logo from '../trivia.png';
 import { actionCreator, getQuestions, SAVE_EMAIL, SAVE_TOKEN } from '../redux/actions';
 
 class Game extends Component {
@@ -29,15 +28,15 @@ class Game extends Component {
     const { questions, loading } = this.props;
 
     return (
-    <>
-  <div>
-        <Header />
-        <header className="App-header">
-          <img src={ logo } className="App-logo" alt="logo" />
-          <p>GAME</p>
-        </header>
-      </div>
-      !loading
+      <>
+        <div>
+          <Header />
+          <header className="App-header">
+            <img src={ logo } className="App-logo" alt="logo" />
+            <p>GAME</p>
+          </header>
+        </div>
+        {!loading
       && (
 
         questions.map((question, indexQuestion) => {
@@ -50,15 +49,15 @@ class Game extends Component {
             return (
 
               <div key={ indexQuestion }>
-                <div data-test-id="question-category">
+                <div data-testid="question-category">
                   {question.category}
                 </div>
                 <div>
-                  <div data-test-id="question-text">
+                  <div data-testid="question-text">
                     {question.question}
 
                   </div>
-                  <div data-test-id="answer-options">
+                  <div data-testid="answer-options">
                     {random.map((ans, indexAnswer) => (
                       <button
                         type="button"
@@ -76,7 +75,7 @@ class Game extends Component {
           }
           return <div key={ indexQuestion } />;
         })
-      )
+      )}
       </>
     );
   }
