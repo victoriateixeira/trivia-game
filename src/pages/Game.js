@@ -62,7 +62,7 @@ class Game extends Component {
                       <button
                         type="button"
                         key={ indexAnswer }
-                        data-test-id={ ans === question.correct_answer
+                        data-testid={ ans === question.correct_answer
                           ? 'correct-answer' : `wrong-answer-${indexAnswer}` }
                       >
                         {ans}
