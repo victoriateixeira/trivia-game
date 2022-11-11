@@ -1,6 +1,9 @@
 export const REQUEST_TOKEN = 'REQUEST_TOKEN';
 export const SAVE_TOKEN = 'SAVE_TOKEN';
+export const SAVE_QUESTIONS = 'SAVE_QUESTIONS';
+export const SAVE_EMAIL = 'SAVE_EMAIL';
 export const ADD_PLAYER_DATA = 'ADD_PLAYER_DATA';
+
 export const actionCreator = (type, payload) => ({
   type,
   payload,
@@ -18,9 +21,24 @@ export function getToken() {
   };
 }
 
+export function getQuestions() {
+  return async (dispatch) => {
+    dispatch(actionCreator(REQUEST_TOKEN, true));
+    const token = localStorage.getItem('token');
+    const url = `https://opentdb.com/api.php?amount=5&token=${token}`;
+    const response = await fetch(url);
+    const questionsData = await response.json();
+    const questionsList = questionsData.results;
+    dispatch(actionCreator(SAVE_QUESTIONS, questionsList));
+    dispatch(actionCreator(REQUEST_TOKEN, false));
+    return questionsList;
+      };
+}
+
 export function addPlayer(player) {
   return {
     type: ADD_PLAYER_DATA,
     player,
-  };
+      };
 }
+
