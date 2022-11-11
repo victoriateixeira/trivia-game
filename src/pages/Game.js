@@ -13,9 +13,9 @@ class Game extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { dispatch, history } = this.props;
-    const questionsList = dispatch(getQuestions());
+    const questionsList = await dispatch(getQuestions());
     if (questionsList.length === 0) {
       localStorage.removeItem('token');
       dispatch(actionCreator(SAVE_TOKEN, ''));
