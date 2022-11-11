@@ -1,6 +1,7 @@
 export const REQUEST_TOKEN = 'REQUEST_TOKEN';
 export const SAVE_TOKEN = 'SAVE_TOKEN';
 export const SAVE_QUESTIONS = 'SAVE_QUESTIONS';
+export const SAVE_EMAIL = 'SAVE_EMAIL';
 
 export const actionCreator = (type, payload) => ({
   type,

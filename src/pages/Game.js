@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { actionCreator, getQuestions, SAVE_TOKEN } from '../redux/actions';
+import { actionCreator, getQuestions, SAVE_EMAIL, SAVE_TOKEN } from '../redux/actions';
 
 class Game extends Component {
   constructor() {
     super();
     this.state = {
-
+      index: 0,
     };
   }
 
@@ -17,7 +17,8 @@ class Game extends Component {
     if (questionsList.length === 0) {
       localStorage.removeItem('token');
       dispatch(actionCreator(SAVE_TOKEN, ''));
-      history.push('/login');
+      dispatch(actionCreator(SAVE_EMAIL, ''));
+      history.push('/');
     }
   }
 
@@ -28,36 +29,42 @@ class Game extends Component {
 
       !loading
       && (
-        questions.map((question, index) => {
+
+        questions.map((question, indexQuestion) => {
           const allAnswers = [...question.incorrect_answers, question.correct_answer];
           const randomHelperNumb = 0.5;
           const shuffle = (arr) => [...arr].sort(() => Math.random() - randomHelperNumb);
           const random = shuffle(allAnswers);
-          return (
-            <div key={ index }>
-              <div data-test-id="question-category">
-                {question.category}
-              </div>
-              <div>
-                <div data-test-id="question-text">
-                  {question.question}
+          const { index } = this.state;
+          if (indexQuestion === index) {
+            return (
 
+              <div key={ indexQuestion }>
+                <div data-test-id="question-category">
+                  {question.category}
                 </div>
-                <div data-test-id="answer-options">
-                  {random.map((ans, indexAnswer) => (
-                    <button
-                      type="button"
-                      key={ indexAnswer }
-                      data-test-id={ ans === question.correct_answer
-                        ? 'correct-answer' : `wrong-answer-${indexAnswer}` }
-                    >
-                      {ans}
-                    </button>
-                  ))}
+                <div>
+                  <div data-test-id="question-text">
+                    {question.question}
+
+                  </div>
+                  <div data-test-id="answer-options">
+                    {random.map((ans, indexAnswer) => (
+                      <button
+                        type="button"
+                        key={ indexAnswer }
+                        data-test-id={ ans === question.correct_answer
+                          ? 'correct-answer' : `wrong-answer-${indexAnswer}` }
+                      >
+                        {ans}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
+            );
+          }
+          return <div key={ indexQuestion } />;
         })
       )
     );
@@ -67,6 +74,7 @@ class Game extends Component {
 const mapStateToProps = (state) => ({
   questions: state.game.questions,
   loading: state.game.loading,
+  email: state.login.email,
 
 });
 
