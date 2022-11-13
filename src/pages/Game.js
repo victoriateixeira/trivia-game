@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import logo from '../trivia.png';
 import { actionCreator, getQuestions, SAVE_EMAIL, SAVE_TOKEN } from '../redux/actions';
+import './Game.css';
 
 class Game extends Component {
   constructor() {
@@ -24,6 +24,15 @@ class Game extends Component {
     }
   }
 
+  handleClick = ({ target }, ans, correctAnswer) => {
+    console.log(target);
+    if (ans === correctAnswer) {
+      target.classList = 'correct';
+    } else {
+      target.classList = 'wrong';
+    }
+  };
+
   render() {
     const { questions, loading } = this.props;
 
@@ -31,23 +40,18 @@ class Game extends Component {
       <>
         <div>
           <Header />
-          <header className="App-header">
-            <img src={ logo } className="App-logo" alt="logo" />
-            <p>GAME</p>
-          </header>
         </div>
         {!loading
       && (
-
         questions.map((question, indexQuestion) => {
           const allAnswers = [...question.incorrect_answers, question.correct_answer];
           const randomHelperNumb = 0.5;
           const shuffle = (arr) => [...arr].sort(() => Math.random() - randomHelperNumb);
           const random = shuffle(allAnswers);
           const { index } = this.state;
+          const correctAnswer = question.correct_answer;
           if (indexQuestion === index) {
             return (
-
               <div key={ indexQuestion }>
                 <div data-testid="question-category">
                   {question.category}
@@ -60,9 +64,10 @@ class Game extends Component {
                   <div data-testid="answer-options">
                     {random.map((ans, indexAnswer) => (
                       <button
+                        onClick={ (e) => this.handleClick(e, ans, correctAnswer) }
                         type="button"
                         key={ indexAnswer }
-                        data-testid={ ans === question.correct_answer
+                        data-testid={ ans === correctAnswer
                           ? 'correct-answer' : `wrong-answer-${indexAnswer}` }
                       >
                         {ans}
