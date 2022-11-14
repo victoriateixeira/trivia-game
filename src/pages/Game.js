@@ -37,7 +37,7 @@ class Game extends React.Component {
   };
 
   render() {
-    const { questions, loading } = this.props;
+    const { questions, loading, history } = this.props;
     const { buttonClicked } = this.state;
 
     return (
@@ -45,6 +45,13 @@ class Game extends React.Component {
         <div>
           <Header />
         </div>
+        <button
+          type="button"
+          onClick={ () => history.push('/') }
+          data-testid="btn-play-again"
+        >
+          Play Again
+        </button>
         {!loading
       && (
         questions.map((question, indexQuestion) => {
