@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import logo from '../trivia.png';
 import { actionCreator, getQuestions, SAVE_EMAIL, SAVE_TOKEN } from '../redux/actions';
 
-class Game extends Component {
+class Game extends React.Component {
   constructor() {
     super();
     this.state = {
       index: 0,
+      buttonClicked: false,
     };
   }
 
@@ -24,21 +24,21 @@ class Game extends Component {
     }
   }
 
+  handleClick = () => {
+    this.setState({ buttonClicked: true });
+  };
+
   render() {
     const { questions, loading } = this.props;
+    const { buttonClicked } = this.state;
 
     return (
       <>
         <div>
           <Header />
-          <header className="App-header">
-            <img src={ logo } className="App-logo" alt="logo" />
-            <p>GAME</p>
-          </header>
         </div>
         {!loading
       && (
-
         questions.map((question, indexQuestion) => {
           const allAnswers = [...question.incorrect_answers, question.correct_answer];
           const randomHelperNumb = 0.5;
@@ -47,7 +47,6 @@ class Game extends Component {
           const { index } = this.state;
           if (indexQuestion === index) {
             return (
-
               <div key={ indexQuestion }>
                 <div data-testid="question-category">
                   {question.category}
@@ -59,14 +58,32 @@ class Game extends Component {
                   </div>
                   <div data-testid="answer-options">
                     {random.map((ans, indexAnswer) => (
-                      <button
-                        type="button"
-                        key={ indexAnswer }
-                        data-testid={ ans === question.correct_answer
-                          ? 'correct-answer' : `wrong-answer-${indexAnswer}` }
-                      >
-                        {ans}
-                      </button>
+                      ans === question.correct_answer
+                        ? (
+                          <button
+                            style={ {
+                              border: buttonClicked ? '3px solid rgb(6, 240, 15)' : '',
+                            } }
+                            onClick={ this.handleClick }
+                            type="button"
+                            key={ indexAnswer }
+                            data-testid="correct-answer"
+                          >
+                            {ans}
+                          </button>)
+                        : (
+                          <button
+                            style={ {
+                              border: buttonClicked ? '3px solid red' : '',
+                            } }
+                            onClick={ this.handleClick }
+                            type="button"
+                            key={ indexAnswer }
+                            data-testid={ `wrong-answer-${indexAnswer}` }
+                          >
+                            {ans}
+                          </button>
+                        )
                     ))}
                   </div>
                 </div>
@@ -85,7 +102,6 @@ const mapStateToProps = (state) => ({
   questions: state.game.questions,
   loading: state.game.loading,
   email: state.login.email,
-
 });
 
 Game.propTypes = {
