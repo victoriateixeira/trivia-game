@@ -28,6 +28,14 @@ class Game extends React.Component {
     this.setState({ buttonClicked: true });
   };
 
+  handleClickNext = () => {
+    const { index } = this.state;
+    this.setState({
+      index: index + 1,
+      buttonClicked: false,
+    });
+  };
+
   render() {
     const { questions, loading } = this.props;
     const { buttonClicked } = this.state;
@@ -54,7 +62,6 @@ class Game extends React.Component {
                 <div>
                   <div data-testid="question-text">
                     {question.question}
-
                   </div>
                   <div data-testid="answer-options">
                     {random.map((ans, indexAnswer) => (
@@ -70,7 +77,8 @@ class Game extends React.Component {
                             data-testid="correct-answer"
                           >
                             {ans}
-                          </button>)
+                          </button>
+                        )
                         : (
                           <button
                             style={ {
@@ -86,6 +94,17 @@ class Game extends React.Component {
                         )
                     ))}
                   </div>
+                </div>
+                <div>
+                  {buttonClicked === true ? (
+                    <button
+                      data-testid="btn-next"
+                      type="button"
+                      onClick={ this.handleClickNext }
+                    >
+                      Next
+                    </button>
+                  ) : ''}
                 </div>
               </div>
             );
