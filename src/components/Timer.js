@@ -1,3 +1,4 @@
+import { toHaveDisplayValue } from '@testing-library/jest-dom/dist/matchers';
 import React from 'react';
 import { connect } from 'react-redux';
 import { actionCreator, START_TIMER } from '../redux/actions';
@@ -11,14 +12,31 @@ class Timer extends React.Component {
   }
 
   componentDidMount() {
-    const { timer, dispatch } = this.props;
+    // const { timer, dispatch } = this.props;
     const ONE_SECOND = 1000;
-    dispatch(actionCreator(START_TIMER, timer));
-    this.setState({
-      timerCounter: timer,
-    });
+    // dispatch(actionCreator(START_TIMER, timer));
+    // this.setState({
+    //   timerCounter: timer,
+    // });
 
-    setTimeout(() => setInterval(() => this.myTimer, ONE_SECOND), 30000);
+    // setTimeout(() => setInterval(() => this.myTimer, ONE_SECOND), 30000);
+    setInterval(() => {
+      this.setState((prevState) => ({
+        timerCounter: prevState.timerCounter - 1,
+      }));
+    }, ONE_SECOND);
+  }
+
+  componentDidUpdate(_prevProps, prevState) {
+    const { dispatch } = this.props;
+    const ZERO_SECONDS = 0;
+    if (prevState.timerCounter === ZERO_SECONDS) {
+      // this.setState({
+      //   timerCounter: 30,
+      //   phaseIndex: prevState.phaseIndex === 2 ? 0 : prevState.phaseIndex + 1,
+      // });
+      dispatch(actionCreator(START_TIMER, 0));
+    }
   }
 
   // componentDidUpdate() {
@@ -29,11 +47,11 @@ class Timer extends React.Component {
   //   }
   // }
 
-  myTimer = () => {
-    this.setState((previousState) => ({
-      timerCounter: previousState.timerCounter - 1,
-    }));
-  };
+  // myTimer = () => {
+  //   this.setState((previousState) => ({
+  //     timerCounter: previousState.timerCounter - 1,
+  //   }));
+  // };
 
   render() {
     const { timerCounter } = this.state;

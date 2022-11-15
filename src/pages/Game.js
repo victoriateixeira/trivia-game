@@ -26,6 +26,13 @@ class Game extends Component {
     }
   }
 
+  componentDidUpdate(_prevProps, prevState) {
+    const { index } = this.state;
+    if (prevState.index !== index) {
+      this.handlesIsSelected();
+    }
+  }
+
   handlesAnswerSelection = (event) => {
     if (event.target.id === 'not-selected') {
       event.target.id = 'selected';
@@ -33,18 +40,24 @@ class Game extends Component {
       event.target.id = 'not-selected';
     }
 
-    this.handlesIsSelected(event);
+    this.handlesIsSelected();
   };
 
-  handlesIsSelected = (event) => {
-    const answersParent = event.target.parentElement;
+  handlesIsSelected = () => {
+    const answersParent = document.getElementById('answer-options');
+    // event.target.parentElement;
     const answers = Array.from(answersParent.childNodes);
     console.log(answers);
     console.log(answers[0]);
     const selectionTrue = answers.some((answer) => answer.id === 'selected');
+    console.log(selectionTrue);
     if (selectionTrue) {
       this.setState({
         isSelected: true,
+      });
+    } else {
+      this.setState({
+        isSelected: false,
       });
     }
   };
@@ -53,6 +66,7 @@ class Game extends Component {
     this.setState((prevState) => ({
       index: prevState.index + 1,
     }));
+    // this.handlesIsSelected();
   };
 
   render() {
@@ -92,7 +106,10 @@ class Game extends Component {
                     {question.question}
 
                   </div>
-                  <div data-testid="answer-options">
+                  <div
+                    data-testid="answer-options"
+                    id="answer-options"
+                  >
                     {random.map((ans, indexAnswer) => (
                       <button
                         type="button"
