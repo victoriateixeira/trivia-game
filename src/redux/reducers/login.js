@@ -15,7 +15,8 @@ const login = (state = initialState, action) => {
 
   case ADD_PLAYER_DATA:
     return {
-      ...action.player,
+      ...state,
+      ...action.payload,
     };
   default:
     return state;

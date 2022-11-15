@@ -4,12 +4,14 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import logo from '../trivia.png';
 import { actionCreator, getQuestions, SAVE_EMAIL, SAVE_TOKEN } from '../redux/actions';
+import Timer from '../components/Timer';
 
 class Game extends Component {
   constructor() {
     super();
     this.state = {
       index: 0,
+      isSelected: false,
     };
   }
 
@@ -24,8 +26,38 @@ class Game extends Component {
     }
   }
 
+  handlesAnswerSelection = (event) => {
+    if (event.target.id === 'not-selected') {
+      event.target.id = 'selected';
+    } else {
+      event.target.id = 'not-selected';
+    }
+
+    this.handlesIsSelected(event);
+  };
+
+  handlesIsSelected = (event) => {
+    const answersParent = event.target.parentElement;
+    const answers = Array.from(answersParent.childNodes);
+    console.log(answers);
+    console.log(answers[0]);
+    const selectionTrue = answers.some((answer) => answer.id === 'selected');
+    if (selectionTrue) {
+      this.setState({
+        isSelected: true,
+      });
+    }
+  };
+
+  handlesNextClick = () => {
+    this.setState((prevState) => ({
+      index: prevState.index + 1,
+    }));
+  };
+
   render() {
     const { questions, loading } = this.props;
+    const { isSelected } = this.state;
 
     return (
       <>
@@ -35,6 +67,9 @@ class Game extends Component {
             <img src={ logo } className="App-logo" alt="logo" />
             <p>GAME</p>
           </header>
+          <div>
+            <Timer />
+          </div>
         </div>
         {!loading
       && (
@@ -64,11 +99,25 @@ class Game extends Component {
                         key={ indexAnswer }
                         data-testid={ ans === question.correct_answer
                           ? 'correct-answer' : `wrong-answer-${indexAnswer}` }
+                        id="not-selected"
+                        onClick={ this.handlesAnswerSelection }
                       >
                         {ans}
                       </button>
                     ))}
                   </div>
+                  {isSelected
+
+                    && (
+                      <button
+                        type="button"
+                        data-testid="btn-next"
+                        onClick={ this.handlesNextClick }
+                      >
+                        Next
+
+                      </button>
+                    )}
                 </div>
               </div>
             );
