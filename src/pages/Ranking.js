@@ -40,7 +40,7 @@ class Ranking extends Component {
         </div>
         <div>
           {ranking.map((player, index) => (
-            <div key={ i }>
+            <div key={ index }>
               <img src={ player.gravatarImg } alt={ player.name } />
               <div data-testid={ `player-name-${index}` }>
                 {player.name}
