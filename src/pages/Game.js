@@ -2,12 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+
 import { actionCreator,
   getQuestions,
   SAVE_EMAIL,
   SAVE_TOKEN,
   START_TIMER } from '../redux/actions';
 import Timer from '../components/Timer';
+
 
 class Game extends React.Component {
   constructor() {
@@ -29,6 +31,7 @@ class Game extends React.Component {
     }
   }
 
+
   componentDidUpdate(prevProps) {
     const { timer } = this.props;
     const ZERO_SECONDS = 0;
@@ -40,12 +43,14 @@ class Game extends React.Component {
     }
   }
 
+
   handleClick = () => {
     this.setState({ buttonClicked: true });
   };
 
   handleClickNext = () => {
     const { index } = this.state;
+
     const { dispatch } = this.props;
     const THIRTY_SECONDS = 30;
     this.setState({
@@ -60,7 +65,9 @@ class Game extends React.Component {
   };
 
   render() {
-    const { questions, loading } = this.props;
+
+    const { questions, loading, history } = this.props;
+
     const { buttonClicked } = this.state;
 
     return (
@@ -68,7 +75,17 @@ class Game extends React.Component {
         <div>
           <Header />
         </div>
+
         {!loading && <Timer />}
+
+        <button
+          type="button"
+          onClick={ () => history.push('/') }
+          data-testid="btn-play-again"
+        >
+          Play Again
+        </button>
+
         {!loading
       && (
         questions.map((question, indexQuestion) => {
@@ -101,6 +118,7 @@ class Game extends React.Component {
                             data-testid="correct-answer"
                             disabled={ buttonClicked }
 
+
                           >
                             {ans}
                           </button>
@@ -114,7 +132,9 @@ class Game extends React.Component {
                             type="button"
                             key={ indexAnswer }
                             data-testid={ `wrong-answer-${indexAnswer}` }
+
                             disabled={ buttonClicked }
+
                           >
                             {ans}
                           </button>
@@ -149,6 +169,7 @@ const mapStateToProps = (state) => ({
   loading: state.game.loading,
   email: state.login.email,
   timer: state.game.timer,
+
 });
 
 Game.propTypes = {
