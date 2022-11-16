@@ -73,11 +73,12 @@ class Game extends React.Component {
 
   handleClickNext = () => {
     const { index } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, history } = this.props;
     const THIRTY_SECONDS = 30;
-    // if (index === 4) {
-    //   history.push('/feedback')
-    // }
+    const four = 4;
+    if (index === four) {
+      history.push('/feedback');
+    }
     this.setState({
       index: index + 1,
     });
