@@ -5,6 +5,7 @@ import './App.css';
 import Login from './pages/Login';
 import Settings from './pages/Settings';
 import Game from './pages/Game';
+import Ranking from './pages/Ranking';
 import Feedback from './pages/Feedback';
 import Ranking from './pages/Ranking';
 
@@ -16,6 +17,7 @@ export default function App() {
         <p>SUA VEZ</p>
         <Switch>
           <Route exact path="/" component={ Login } />
+          <Route path="/ranking" component={ Ranking } />
           <Route path="/game" component={ Game } />
           <Route path="/settings" component={ Settings } />
           <Route path="/feedback" component={ Feedback } />

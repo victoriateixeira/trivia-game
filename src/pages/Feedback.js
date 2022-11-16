@@ -45,6 +45,7 @@ class Feedback extends React.Component {
         </button>
       </>
     );
+
   }
 }
 Feedback.propTypes = {
