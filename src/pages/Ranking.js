@@ -19,13 +19,10 @@ class Ranking extends Component {
     }
   }
 
-  redirectToLogin = () => {
-    const { history } = this.props;
-    history.push('/');
-  };
-
   render() {
     const { ranking } = this.state;
+    const { history } = this.props;
+
     return (
       <div>
         <div>
@@ -33,7 +30,7 @@ class Ranking extends Component {
           <button
             type="button"
             data-testid="btn-go-home"
-            onClick={ this.redirectToLogin }
+            onClick={ () => history.push('/') }
           >
             Login
           </button>

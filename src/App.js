@@ -16,7 +16,7 @@ export default function App() {
         <p>SUA VEZ</p>
         <Switch>
           <Route exact path="/" component={ Login } />
-          <Route exact path="/ranking" component={ Ranking } />
+          <Route path="/ranking" component={ Ranking } />
           <Route path="/game" component={ Game } />
           <Route path="/settings" component={ Settings } />
           <Route path="/feedback" component={ Feedback } />

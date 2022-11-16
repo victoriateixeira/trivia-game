@@ -4,11 +4,6 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 
 class Feedback extends React.Component {
-  redirectToRanking = () => {
-    const { history } = this.props;
-    history.push('/ranking');
-  };
-
   render() {
     const { assertions, score, history } = this.props;
     const tres = 3;
@@ -33,7 +28,7 @@ class Feedback extends React.Component {
           <button
             type="button"
             data-testid="btn-ranking"
-            onClick={ this.redirectToRanking }
+            onClick={ history.push('/ranking') }
           >
             Ranking
           </button>
