@@ -26,7 +26,7 @@ class Ranking extends Component {
     return (
       <div>
         <div>
-          <tittle data-testid="ranking-title">Ranking</tittle>
+          <h1 data-testid="ranking-title">Ranking</h1>
           <button
             type="button"
             data-testid="btn-go-home"
@@ -39,12 +39,12 @@ class Ranking extends Component {
           {ranking.map((player, index) => (
             <div key={ index }>
               <img src={ player.gravatarImg } alt={ player.name } />
-              <div data-testid={ `player-name-${index}` }>
+              <p data-testid={ `player-name-${index}` }>
                 {player.name}
-              </div>
-              <div data-testid={ `player-score-${index}` }>
+              </p>
+              <p data-testid={ `player-score-${index}` }>
                 {player.score}
-              </div>
+              </p>
             </div>
           ))}
         </div>
