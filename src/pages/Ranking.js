@@ -19,7 +19,6 @@ class Ranking extends Component {
 
   redirectToLogin = () => {
     const { history } = this.props;
-    localStorage.removeItem('token');
     history.push('/');
   };
 
