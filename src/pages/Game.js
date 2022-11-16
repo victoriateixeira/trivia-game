@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+
 import { actionCreator,
   getQuestions,
   SAVE_EMAIL,
@@ -79,17 +80,15 @@ class Game extends React.Component {
     // }
     this.setState({
       index: index + 1,
-
     });
     dispatch(actionCreator(START_TIMER, THIRTY_SECONDS));
     this.setState({
-
       buttonClicked: false,
     });
   };
 
   render() {
-    const { questions, loading } = this.props;
+    const { questions, loading, history } = this.props;
     const { buttonClicked } = this.state;
 
     return (
@@ -97,7 +96,17 @@ class Game extends React.Component {
         <div>
           <Header />
         </div>
+
         {!loading && <Timer />}
+
+        <button
+          type="button"
+          onClick={ () => history.push('/') }
+          data-testid="btn-play-again"
+        >
+          Play Again
+        </button>
+
         {!loading
       && (
         questions.map((question, indexQuestion) => {
@@ -130,7 +139,6 @@ class Game extends React.Component {
                             data-testid="correct-answer"
                             id="correct-answer"
                             disabled={ buttonClicked }
-
                           >
                             {ans}
                           </button>
@@ -182,6 +190,7 @@ const mapStateToProps = (state) => ({
   timer: state.game.timer,
   assertions: state.player.assertions,
   score: state.player.score,
+
 });
 
 Game.propTypes = {
