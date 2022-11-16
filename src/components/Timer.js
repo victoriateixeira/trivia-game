@@ -1,6 +1,6 @@
-import { toHaveDisplayValue } from '@testing-library/jest-dom/dist/matchers';
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { actionCreator, START_TIMER } from '../redux/actions';
 
 class Timer extends React.Component {
@@ -12,7 +12,36 @@ class Timer extends React.Component {
   }
 
   componentDidMount() {
-    // const { timer, dispatch } = this.props;
+    this.startsTimer();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { timer } = this.props;
+    const ZERO_SECONDS = 0;
+    const THIRTY_SECONDS = 30;
+
+    if (prevProps.timer !== timer && timer === ZERO_SECONDS) {
+      // dispatch(actionCreator(START_TIMER, THIRTY_SECONDS));
+      clearInterval(this.intervalID);
+      this.setState({
+        timerCounter: 0,
+      });
+    }
+    if (prevProps.timer !== timer && timer === THIRTY_SECONDS) {
+      this.setState({
+        timerCounter: 30,
+
+      });
+      // this.startsTimer();
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalID);
+  }
+
+  startsTimer = () => {
+    const { dispatch } = this.props;
     const ONE_SECOND = 1000;
     // dispatch(actionCreator(START_TIMER, timer));
     // this.setState({
@@ -20,24 +49,14 @@ class Timer extends React.Component {
     // });
 
     // setTimeout(() => setInterval(() => this.myTimer, ONE_SECOND), 30000);
-    setInterval(() => {
+    this.intervalID = setInterval(() => {
       this.setState((prevState) => ({
         timerCounter: prevState.timerCounter - 1,
       }));
+      const { timerCounter } = this.state;
+      dispatch(actionCreator(START_TIMER, timerCounter));
     }, ONE_SECOND);
-  }
-
-  componentDidUpdate(_prevProps, prevState) {
-    const { dispatch } = this.props;
-    const ZERO_SECONDS = 0;
-    if (prevState.timerCounter === ZERO_SECONDS) {
-      // this.setState({
-      //   timerCounter: 30,
-      //   phaseIndex: prevState.phaseIndex === 2 ? 0 : prevState.phaseIndex + 1,
-      // });
-      dispatch(actionCreator(START_TIMER, 0));
-    }
-  }
+  };
 
   // componentDidUpdate() {
   //   const { timerCounter } = this.state;
@@ -66,4 +85,10 @@ class Timer extends React.Component {
 const mapStateToProps = (globalState) => ({
   timer: globalState.game.timer,
 });
+
+Timer.propTypes = {
+  timer: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired,
+};
+
 export default connect(mapStateToProps)(Timer);

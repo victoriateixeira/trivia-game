@@ -4,7 +4,7 @@ export const SAVE_QUESTIONS = 'SAVE_QUESTIONS';
 export const SAVE_EMAIL = 'SAVE_EMAIL';
 export const ADD_PLAYER_DATA = 'ADD_PLAYER_DATA';
 export const START_TIMER = 'START_TIMER';
-export const CLEAR_TIMER = 'CLEAR_TIMER';
+// export const CHANGE_TIMER = 'CHANGE_TIMER';
 
 export const actionCreator = (type, payload) => ({
   type,

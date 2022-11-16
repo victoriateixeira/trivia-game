@@ -1,17 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import logo from '../trivia.png';
-import { actionCreator, getQuestions, SAVE_EMAIL, SAVE_TOKEN } from '../redux/actions';
+import { actionCreator,
+  getQuestions,
+  SAVE_EMAIL,
+  SAVE_TOKEN,
+  START_TIMER } from '../redux/actions';
 import Timer from '../components/Timer';
 
-class Game extends Component {
+class Game extends React.Component {
   constructor() {
     super();
     this.state = {
       index: 0,
-      isSelected: false,
+      buttonClicked: false,
     };
   }
 
@@ -26,68 +29,50 @@ class Game extends Component {
     }
   }
 
-  componentDidUpdate(_prevProps, prevState) {
-    const { index } = this.state;
-    if (prevState.index !== index) {
-      this.handlesIsSelected();
+  componentDidUpdate(prevProps, _prevState) {
+    const { timer } = this.props;
+    const ZERO_SECONDS = 0;
+    // const THIRTY_SECONDS = 30;
+    if (prevProps.timer !== timer && timer === ZERO_SECONDS) {
+      this.setState({
+        buttonClicked: true,
+      });
+
+      // dispatch(actionCreator(START_TIMER, ZERO_SECONDS));
     }
   }
 
-  handlesAnswerSelection = (event) => {
-    if (event.target.id === 'not-selected') {
-      event.target.id = 'selected';
-    } else {
-      event.target.id = 'not-selected';
-    }
-
-    this.handlesIsSelected();
+  handleClick = () => {
+    this.setState({ buttonClicked: true });
   };
 
-  handlesIsSelected = () => {
-    const answersParent = document.getElementById('answer-options');
-    // event.target.parentElement;
-    const answers = Array.from(answersParent.childNodes);
-    console.log(answers);
-    console.log(answers[0]);
-    const selectionTrue = answers.some((answer) => answer.id === 'selected');
-    console.log(selectionTrue);
-    if (selectionTrue) {
-      this.setState({
-        isSelected: true,
-      });
-    } else {
-      this.setState({
-        isSelected: false,
-      });
-    }
-  };
+  handleClickNext = () => {
+    const { index } = this.state;
+    const { dispatch } = this.props;
+    const THIRTY_SECONDS = 30;
+    this.setState({
+      index: index + 1,
 
-  handlesNextClick = () => {
-    this.setState((prevState) => ({
-      index: prevState.index + 1,
-    }));
-    // this.handlesIsSelected();
+    });
+    dispatch(actionCreator(START_TIMER, THIRTY_SECONDS));
+    this.setState({
+
+      buttonClicked: false,
+    });
   };
 
   render() {
     const { questions, loading } = this.props;
-    const { isSelected } = this.state;
+    const { buttonClicked } = this.state;
 
     return (
       <>
         <div>
           <Header />
-          <header className="App-header">
-            <img src={ logo } className="App-logo" alt="logo" />
-            <p>GAME</p>
-          </header>
-          <div>
-            <Timer />
-          </div>
         </div>
+        {!loading && <Timer />}
         {!loading
       && (
-
         questions.map((question, indexQuestion) => {
           const allAnswers = [...question.incorrect_answers, question.correct_answer];
           const randomHelperNumb = 0.5;
@@ -96,7 +81,6 @@ class Game extends Component {
           const { index } = this.state;
           if (indexQuestion === index) {
             return (
-
               <div key={ indexQuestion }>
                 <div data-testid="question-category">
                   {question.category}
@@ -104,37 +88,49 @@ class Game extends Component {
                 <div>
                   <div data-testid="question-text">
                     {question.question}
-
                   </div>
-                  <div
-                    data-testid="answer-options"
-                    id="answer-options"
-                  >
+                  <div data-testid="answer-options">
                     {random.map((ans, indexAnswer) => (
-                      <button
-                        type="button"
-                        key={ indexAnswer }
-                        data-testid={ ans === question.correct_answer
-                          ? 'correct-answer' : `wrong-answer-${indexAnswer}` }
-                        id="not-selected"
-                        onClick={ this.handlesAnswerSelection }
-                      >
-                        {ans}
-                      </button>
+                      ans === question.correct_answer
+                        ? (
+                          <button
+                            style={ {
+                              border: buttonClicked ? '3px solid rgb(6, 240, 15)' : '',
+                            } }
+                            onClick={ this.handleClick }
+                            type="button"
+                            key={ indexAnswer }
+                            data-testid="correct-answer"
+                          >
+                            {ans}
+                          </button>
+                        )
+                        : (
+                          <button
+                            style={ {
+                              border: buttonClicked ? '3px solid red' : '',
+                            } }
+                            onClick={ this.handleClick }
+                            type="button"
+                            key={ indexAnswer }
+                            data-testid={ `wrong-answer-${indexAnswer}` }
+                          >
+                            {ans}
+                          </button>
+                        )
                     ))}
                   </div>
-                  {isSelected
-
-                    && (
-                      <button
-                        type="button"
-                        data-testid="btn-next"
-                        onClick={ this.handlesNextClick }
-                      >
-                        Next
-
-                      </button>
-                    )}
+                </div>
+                <div>
+                  {buttonClicked === true ? (
+                    <button
+                      data-testid="btn-next"
+                      type="button"
+                      onClick={ this.handleClickNext }
+                    >
+                      Next
+                    </button>
+                  ) : ''}
                 </div>
               </div>
             );
@@ -151,7 +147,7 @@ const mapStateToProps = (state) => ({
   questions: state.game.questions,
   loading: state.game.loading,
   email: state.login.email,
-
+  timer: state.game.timer,
 });
 
 Game.propTypes = {
@@ -161,5 +157,6 @@ Game.propTypes = {
   dispatch: PropTypes.func.isRequired,
   questions: PropTypes.arrayOf.isRequired,
   loading: PropTypes.bool.isRequired,
+  timer: PropTypes.number.isRequired,
 };
 export default connect(mapStateToProps)(Game);
