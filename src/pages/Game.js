@@ -10,7 +10,6 @@ import { actionCreator,
   START_TIMER } from '../redux/actions';
 import Timer from '../components/Timer';
 
-
 class Game extends React.Component {
   constructor() {
     super();
@@ -31,7 +30,6 @@ class Game extends React.Component {
     }
   }
 
-
   componentDidUpdate(prevProps) {
     const { timer } = this.props;
     const ZERO_SECONDS = 0;
@@ -43,31 +41,25 @@ class Game extends React.Component {
     }
   }
 
-
   handleClick = () => {
     this.setState({ buttonClicked: true });
   };
 
   handleClickNext = () => {
     const { index } = this.state;
-
     const { dispatch } = this.props;
     const THIRTY_SECONDS = 30;
     this.setState({
       index: index + 1,
-
     });
     dispatch(actionCreator(START_TIMER, THIRTY_SECONDS));
     this.setState({
-
       buttonClicked: false,
     });
   };
 
   render() {
-
     const { questions, loading, history } = this.props;
-
     const { buttonClicked } = this.state;
 
     return (
@@ -117,8 +109,6 @@ class Game extends React.Component {
                             key={ indexAnswer }
                             data-testid="correct-answer"
                             disabled={ buttonClicked }
-
-
                           >
                             {ans}
                           </button>
@@ -132,9 +122,7 @@ class Game extends React.Component {
                             type="button"
                             key={ indexAnswer }
                             data-testid={ `wrong-answer-${indexAnswer}` }
-
                             disabled={ buttonClicked }
-
                           >
                             {ans}
                           </button>
