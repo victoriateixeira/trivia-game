@@ -36,14 +36,12 @@ class Feedback extends React.Component {
           {' '}
           questions right!
         </span>
-
         <br />
         <span>
           Score:
           {' '}
           <span data-testid="feedback-total-score">{score}</span>
         </span>
-
         <button
           type="button"
           onClick={ () => history.push('/') }
@@ -62,7 +60,6 @@ class Feedback extends React.Component {
     );
   }
 }
-
 Feedback.propTypes = {
   score: PropTypes.number.isRequired,
   assertions: PropTypes.number.isRequired,
@@ -72,12 +69,10 @@ Feedback.propTypes = {
   name: PropTypes.string.isRequired,
   gravatarEmail: PropTypes.string.isRequired,
 };
-
 const mapStateToProps = (globalState) => ({
   assertions: globalState.player.assertions,
   score: globalState.player.score,
   name: globalState.player.name,
   gravatarEmail: globalState.player.gravatarEmail,
 });
-
 export default connect(mapStateToProps)(Feedback);
