@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import md5 from 'crypto-js/md5';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 
@@ -43,34 +42,6 @@ class Game extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    const { name, score } = this.props;
-    const gravatarImg = this.getAvatar();
-    const player = { name, score, gravatarImg };
-    let ranking = [];
-    const ourLocalStorage = localStorage.getItem('ranking') || undefined;
-    if (ourLocalStorage !== undefined) {
-      ranking = JSON.parse(localStorage.getItem('ranking'));
-    }
-    if (ourLocalStorage === undefined) {
-      const format = {
-        ranking: [
-          player,
-        ],
-      };
-      localStorage.setItem('ranking', JSON.stringify(format));
-    } else {
-      ranking.ranking.push(player);
-      localStorage.setItem('ranking', JSON.stringify(ranking));
-    }
-  }
-
-  getAvatar = () => {
-    const { gravatarEmail } = this.props;
-    const gravatar = md5(gravatarEmail).toString();
-    return `https://www.gravatar.com/avatar/${gravatar}`;
-  };
-
   definesQuestionDifficulty = () => {
     const { questions } = this.props;
     const { index } = this.state;
@@ -92,7 +63,6 @@ class Game extends React.Component {
     const NUMBER_TEN = 10;
     this.setState({ buttonClicked: true });
     const questionDiff = this.definesQuestionDifficulty();
-
     if (target.id === 'correct-answer') {
       dispatch(actionCreator(SAVE_SCORE, (NUMBER_TEN + timer * questionDiff)));
     }
@@ -217,9 +187,6 @@ const mapStateToProps = (state) => ({
   email: state.player.email,
   timer: state.game.timer,
   assertions: state.player.assertions,
-  score: state.player.score,
-  name: state.player.name,
-  gravatarEmail: state.player.gravatarEmail,
 });
 
 Game.propTypes = {
@@ -230,8 +197,5 @@ Game.propTypes = {
   questions: PropTypes.arrayOf.isRequired,
   loading: PropTypes.bool.isRequired,
   timer: PropTypes.number.isRequired,
-  score: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  gravatarEmail: PropTypes.string.isRequired,
 };
 export default connect(mapStateToProps)(Game);
