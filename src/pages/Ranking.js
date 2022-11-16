@@ -11,10 +11,12 @@ class Ranking extends Component {
 
   componentDidMount() {
     const ranking = JSON.parse(localStorage.getItem('ranking'));
-    const orderedRanking = ranking.sort((a, b) => b.score - a.score);
-    this.setState({
-      ranking: orderedRanking,
-    });
+    if (ranking) {
+      const orderedRanking = ranking.sort((a, b) => b.score - a.score);
+      this.setState({
+        ranking: orderedRanking,
+      });
+    }
   }
 
   redirectToLogin = () => {
