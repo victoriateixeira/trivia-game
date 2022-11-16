@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import { actionCreator,
   getQuestions,
   SAVE_EMAIL,
+  SAVE_SCORE,
   SAVE_TOKEN,
   START_TIMER } from '../redux/actions';
 import Timer from '../components/Timer';
@@ -40,14 +41,42 @@ class Game extends React.Component {
     }
   }
 
-  handleClick = () => {
+  definesQuestionDifficulty = () => {
+    const { questions } = this.props;
+    const { index } = this.state;
+    const EASY = 1;
+    const MEDIUM = 2;
+    const HARD = 3;
+
+    const diff = questions[index].difficulty;
+    if (diff === 'easy') {
+      return EASY;
+    } if (diff === 'medium') {
+      return MEDIUM;
+    }
+    return HARD;
+  };
+
+  handleClick = ({ target }) => {
+    const { dispatch, timer } = this.props;
+    const NUMBER_TEN = 10;
     this.setState({ buttonClicked: true });
+    const questionDiff = this.definesQuestionDifficulty();
+    console.log(target);
+    console.log(target.id);
+
+    if (target.id === 'correct-answer') {
+      dispatch(actionCreator(SAVE_SCORE, (NUMBER_TEN + timer * questionDiff)));
+    }
   };
 
   handleClickNext = () => {
     const { index } = this.state;
     const { dispatch } = this.props;
     const THIRTY_SECONDS = 30;
+    // if (index === 4) {
+    //   history.push('/feedback')
+    // }
     this.setState({
       index: index + 1,
 
@@ -99,6 +128,7 @@ class Game extends React.Component {
                             type="button"
                             key={ indexAnswer }
                             data-testid="correct-answer"
+                            id="correct-answer"
                             disabled={ buttonClicked }
 
                           >
@@ -114,6 +144,7 @@ class Game extends React.Component {
                             type="button"
                             key={ indexAnswer }
                             data-testid={ `wrong-answer-${indexAnswer}` }
+                            id="wrong-answer"
                             disabled={ buttonClicked }
                           >
                             {ans}
@@ -147,8 +178,10 @@ class Game extends React.Component {
 const mapStateToProps = (state) => ({
   questions: state.game.questions,
   loading: state.game.loading,
-  email: state.login.email,
+  email: state.player.email,
   timer: state.game.timer,
+  assertions: state.player.assertions,
+  score: state.player.score,
 });
 
 Game.propTypes = {
