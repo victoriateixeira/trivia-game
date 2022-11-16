@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class Ranking extends Component {
   constructor() {
@@ -60,4 +61,4 @@ Ranking.propTypes = {
   }).isRequired,
 };
 
-export default Ranking;
+export default connect()(Ranking);
