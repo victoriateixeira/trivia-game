@@ -4,6 +4,11 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 
 class Feedback extends React.Component {
+  redirectToRanking = () => {
+    const { history } = this.props;
+    history.push('/ranking');
+  };
+
   render() {
     const { assertions, score } = this.props;
     const tres = 3;
@@ -12,6 +17,14 @@ class Feedback extends React.Component {
       return (
         <>
           <Header />
+
+          <button
+            type="button"
+            data-testid="btn-ranking"
+            onClick={ this.redirectToRanking }
+          >
+            Ranking
+          </button>
 
           <br />
 
@@ -56,6 +69,9 @@ class Feedback extends React.Component {
 Feedback.propTypes = {
   score: PropTypes.number.isRequired,
   assertions: PropTypes.number.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 const mapStateToProps = (globalState) => ({
