@@ -1,9 +1,14 @@
-import { REQUEST_TOKEN, SAVE_QUESTIONS, SAVE_TOKEN } from '../actions';
+import {
+  REQUEST_TOKEN,
+  SAVE_QUESTIONS,
+  SAVE_TOKEN,
+  START_TIMER } from '../actions';
 
 const initialState = {
   token: '',
   loading: false,
   questions: [],
+  timer: 30,
 };
 
 const game = (state = initialState, action) => {
@@ -20,6 +25,10 @@ const game = (state = initialState, action) => {
   case SAVE_QUESTIONS: return {
     ...state,
     questions: action.payload,
+  };
+  case START_TIMER: return {
+    ...state,
+    timer: action.payload,
   };
 
   default:

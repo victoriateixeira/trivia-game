@@ -2,7 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import { actionCreator, getQuestions, SAVE_EMAIL, SAVE_TOKEN } from '../redux/actions';
+
+import { actionCreator,
+  getQuestions,
+  SAVE_EMAIL,
+  SAVE_SCORE,
+  SAVE_TOKEN,
+  START_TIMER } from '../redux/actions';
+import Timer from '../components/Timer';
 
 class Game extends React.Component {
   constructor() {
@@ -24,12 +31,64 @@ class Game extends React.Component {
     }
   }
 
-  handleClick = () => {
+  componentDidUpdate(prevProps) {
+    const { timer } = this.props;
+    const ZERO_SECONDS = 0;
+    // const THIRTY_SECONDS = 30;
+    if (prevProps.timer !== timer && timer === ZERO_SECONDS) {
+      this.setState({
+        buttonClicked: true,
+      });
+    }
+  }
+
+  definesQuestionDifficulty = () => {
+    const { questions } = this.props;
+    const { index } = this.state;
+    const EASY = 1;
+    const MEDIUM = 2;
+    const HARD = 3;
+
+    const diff = questions[index].difficulty;
+    if (diff === 'easy') {
+      return EASY;
+    } if (diff === 'medium') {
+      return MEDIUM;
+    }
+    return HARD;
+  };
+
+  handleClick = ({ target }) => {
+    const { dispatch, timer } = this.props;
+    const NUMBER_TEN = 10;
     this.setState({ buttonClicked: true });
+    const questionDiff = this.definesQuestionDifficulty();
+    console.log(target);
+    console.log(target.id);
+
+    if (target.id === 'correct-answer') {
+      dispatch(actionCreator(SAVE_SCORE, (NUMBER_TEN + timer * questionDiff)));
+    }
+  };
+
+  handleClickNext = () => {
+    const { index } = this.state;
+    const { dispatch } = this.props;
+    const THIRTY_SECONDS = 30;
+    // if (index === 4) {
+    //   history.push('/feedback')
+    // }
+    this.setState({
+      index: index + 1,
+    });
+    dispatch(actionCreator(START_TIMER, THIRTY_SECONDS));
+    this.setState({
+      buttonClicked: false,
+    });
   };
 
   render() {
-    const { questions, loading } = this.props;
+    const { questions, loading, history } = this.props;
     const { buttonClicked } = this.state;
 
     return (
@@ -37,6 +96,17 @@ class Game extends React.Component {
         <div>
           <Header />
         </div>
+
+        {!loading && <Timer />}
+
+        <button
+          type="button"
+          onClick={ () => history.push('/') }
+          data-testid="btn-play-again"
+        >
+          Play Again
+        </button>
+
         {!loading
       && (
         questions.map((question, indexQuestion) => {
@@ -54,7 +124,6 @@ class Game extends React.Component {
                 <div>
                   <div data-testid="question-text">
                     {question.question}
-
                   </div>
                   <div data-testid="answer-options">
                     {random.map((ans, indexAnswer) => (
@@ -68,9 +137,12 @@ class Game extends React.Component {
                             type="button"
                             key={ indexAnswer }
                             data-testid="correct-answer"
+                            id="correct-answer"
+                            disabled={ buttonClicked }
                           >
                             {ans}
-                          </button>)
+                          </button>
+                        )
                         : (
                           <button
                             style={ {
@@ -80,12 +152,25 @@ class Game extends React.Component {
                             type="button"
                             key={ indexAnswer }
                             data-testid={ `wrong-answer-${indexAnswer}` }
+                            id="wrong-answer"
+                            disabled={ buttonClicked }
                           >
                             {ans}
                           </button>
                         )
                     ))}
                   </div>
+                </div>
+                <div>
+                  {buttonClicked === true ? (
+                    <button
+                      data-testid="btn-next"
+                      type="button"
+                      onClick={ this.handleClickNext }
+                    >
+                      Next
+                    </button>
+                  ) : ''}
                 </div>
               </div>
             );
@@ -101,7 +186,11 @@ class Game extends React.Component {
 const mapStateToProps = (state) => ({
   questions: state.game.questions,
   loading: state.game.loading,
-  email: state.login.email,
+  email: state.player.email,
+  timer: state.game.timer,
+  assertions: state.player.assertions,
+  score: state.player.score,
+
 });
 
 Game.propTypes = {
@@ -111,5 +200,6 @@ Game.propTypes = {
   dispatch: PropTypes.func.isRequired,
   questions: PropTypes.arrayOf.isRequired,
   loading: PropTypes.bool.isRequired,
+  timer: PropTypes.number.isRequired,
 };
 export default connect(mapStateToProps)(Game);

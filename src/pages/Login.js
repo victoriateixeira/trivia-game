@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getToken, addPlayer } from '../redux/actions';
+import { getToken, actionCreator, ADD_PLAYER_DATA } from '../redux/actions';
 
 class Login extends React.Component {
   constructor() {
@@ -37,7 +37,7 @@ class Login extends React.Component {
     const { email, name } = this.state;
     const { history, loading, dispatch } = this.props;
     await dispatch(getToken());
-    dispatch(addPlayer({ email, name }));
+    dispatch(actionCreator(ADD_PLAYER_DATA, { email, name }));
     if (!loading) {
       history.push('/game');
     }
