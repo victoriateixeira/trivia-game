@@ -1,5 +1,7 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class Ranking extends Component {
   constructor() {
@@ -12,7 +14,7 @@ class Ranking extends Component {
   componentDidMount() {
     const ranking = JSON.parse(localStorage.getItem('ranking'));
     if (ranking) {
-      const rankingSorted = ranking.ranking.sort((a, b) => b.score - a.score);
+      const rankingSorted = ranking.sort((a, b) => b.score - a.score);
       this.setState({
         ranking: rankingSorted,
       });
@@ -60,4 +62,5 @@ Ranking.propTypes = {
   }).isRequired,
 };
 
-export default Ranking;
+export default connect()(Ranking);
+

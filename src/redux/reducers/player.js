@@ -19,15 +19,15 @@ const player = (state = initialState, action) => {
       ...state,
       gravatarEmail: action.payload.email,
       name: action.payload.name,
+      score: 0,
 
     };
   case SAVE_SCORE:
-    return {
+    return ({
       ...state,
-      score: state.score + action.payload,
       assertions: state.assertions + 1,
-
-    };
+      score: state.score + action.payload,
+    });
   default:
     return state;
   }
