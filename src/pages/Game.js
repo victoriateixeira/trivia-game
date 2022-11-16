@@ -29,7 +29,7 @@ class Game extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, _prevState) {
+  componentDidUpdate(prevProps) {
     const { timer } = this.props;
     const ZERO_SECONDS = 0;
     // const THIRTY_SECONDS = 30;
@@ -37,8 +37,6 @@ class Game extends React.Component {
       this.setState({
         buttonClicked: true,
       });
-
-      // dispatch(actionCreator(START_TIMER, ZERO_SECONDS));
     }
   }
 
@@ -101,6 +99,8 @@ class Game extends React.Component {
                             type="button"
                             key={ indexAnswer }
                             data-testid="correct-answer"
+                            disabled={ buttonClicked }
+
                           >
                             {ans}
                           </button>
@@ -114,6 +114,7 @@ class Game extends React.Component {
                             type="button"
                             key={ indexAnswer }
                             data-testid={ `wrong-answer-${indexAnswer}` }
+                            disabled={ buttonClicked }
                           >
                             {ans}
                           </button>
