@@ -12,19 +12,12 @@ class Feedback extends React.Component {
       return (
         <>
           <Header />
-
           <br />
-
           <h2 data-testid="feedback-text">Could be better...</h2>
-
           <br />
-
           <p data-testid="feedback-total-question">{assertions}</p>
-
           <br />
-
           <p data-testid="feedback-total-score">{score}</p>
-
           <button
             type="button"
             onClick={ () => history.push('/') }
@@ -32,7 +25,13 @@ class Feedback extends React.Component {
           >
             Play Again
           </button>
-
+          <button
+            type="button"
+            data-testid="btn-ranking"
+            onClick={ () => history.push('/ranking') }
+          >
+            Ranking
+          </button>
         </>
       );
     }
