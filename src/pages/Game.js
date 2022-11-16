@@ -2,7 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import { actionCreator, getQuestions, SAVE_EMAIL, SAVE_TOKEN } from '../redux/actions';
+
+import { actionCreator,
+  getQuestions,
+  SAVE_EMAIL,
+  SAVE_TOKEN,
+  START_TIMER } from '../redux/actions';
+import Timer from '../components/Timer';
 
 class Game extends React.Component {
   constructor() {
@@ -24,14 +30,30 @@ class Game extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const { timer } = this.props;
+    const ZERO_SECONDS = 0;
+    // const THIRTY_SECONDS = 30;
+    if (prevProps.timer !== timer && timer === ZERO_SECONDS) {
+      this.setState({
+        buttonClicked: true,
+      });
+    }
+  }
+
   handleClick = () => {
     this.setState({ buttonClicked: true });
   };
 
   handleClickNext = () => {
     const { index } = this.state;
+    const { dispatch } = this.props;
+    const THIRTY_SECONDS = 30;
     this.setState({
       index: index + 1,
+    });
+    dispatch(actionCreator(START_TIMER, THIRTY_SECONDS));
+    this.setState({
       buttonClicked: false,
     });
   };
@@ -45,6 +67,9 @@ class Game extends React.Component {
         <div>
           <Header />
         </div>
+
+        {!loading && <Timer />}
+
         <button
           type="button"
           onClick={ () => history.push('/') }
@@ -52,6 +77,7 @@ class Game extends React.Component {
         >
           Play Again
         </button>
+
         {!loading
       && (
         questions.map((question, indexQuestion) => {
@@ -82,6 +108,7 @@ class Game extends React.Component {
                             type="button"
                             key={ indexAnswer }
                             data-testid="correct-answer"
+                            disabled={ buttonClicked }
                           >
                             {ans}
                           </button>
@@ -95,6 +122,7 @@ class Game extends React.Component {
                             type="button"
                             key={ indexAnswer }
                             data-testid={ `wrong-answer-${indexAnswer}` }
+                            disabled={ buttonClicked }
                           >
                             {ans}
                           </button>
@@ -128,6 +156,8 @@ const mapStateToProps = (state) => ({
   questions: state.game.questions,
   loading: state.game.loading,
   email: state.login.email,
+  timer: state.game.timer,
+
 });
 
 Game.propTypes = {
@@ -137,5 +167,6 @@ Game.propTypes = {
   dispatch: PropTypes.func.isRequired,
   questions: PropTypes.arrayOf.isRequired,
   loading: PropTypes.bool.isRequired,
+  timer: PropTypes.number.isRequired,
 };
 export default connect(mapStateToProps)(Game);

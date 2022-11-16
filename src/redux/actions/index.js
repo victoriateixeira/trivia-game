@@ -3,6 +3,8 @@ export const SAVE_TOKEN = 'SAVE_TOKEN';
 export const SAVE_QUESTIONS = 'SAVE_QUESTIONS';
 export const SAVE_EMAIL = 'SAVE_EMAIL';
 export const ADD_PLAYER_DATA = 'ADD_PLAYER_DATA';
+export const START_TIMER = 'START_TIMER';
+// export const CHANGE_TIMER = 'CHANGE_TIMER';
 
 export const actionCreator = (type, payload) => ({
   type,
@@ -35,9 +37,9 @@ export function getQuestions() {
   };
 }
 
-export function addPlayer(player) {
-  return {
-    type: ADD_PLAYER_DATA,
-    player,
-  };
-}
+// export function addPlayer(player) {
+//   return {
+//     type: ADD_PLAYER_DATA,
+//     player,
+//   };
+// }
