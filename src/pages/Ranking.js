@@ -29,7 +29,7 @@ class Ranking extends Component {
     return (
       <div>
         <div>
-          <p data-testid="ranking-title">Ranking</p>
+          <tittle data-testid="ranking-title">Ranking</tittle>
           <button
             type="button"
             data-testid="btn-go-home"
