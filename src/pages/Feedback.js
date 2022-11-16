@@ -8,6 +8,7 @@ class Feedback extends React.Component {
     const { assertions, score, history } = this.props;
     const tres = 3;
 
+
     return (
       <>
         <Header />
@@ -45,7 +46,7 @@ class Feedback extends React.Component {
         </button>
       </>
     );
-  }
+    
 }
 
 Feedback.propTypes = {
