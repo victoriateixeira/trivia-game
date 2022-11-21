@@ -5,6 +5,7 @@ export const SAVE_EMAIL = 'SAVE_EMAIL';
 export const ADD_PLAYER_DATA = 'ADD_PLAYER_DATA';
 export const START_TIMER = 'START_TIMER';
 export const SAVE_SCORE = 'SAVE_SCORE';
+export const RESET_SCORE = 'RESET_SCORE';
 // export const CHANGE_TIMER = 'CHANGE_TIMER';
 
 export const actionCreator = (type, payload) => ({

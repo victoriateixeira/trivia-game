@@ -17,6 +17,7 @@ class Game extends React.Component {
     this.state = {
       index: 0,
       buttonClicked: false,
+      questionAnswers: [],
     };
   }
 
@@ -29,15 +30,36 @@ class Game extends React.Component {
       dispatch(actionCreator(SAVE_EMAIL, ''));
       history.push('/');
     }
+    if (questionsList.length !== 0) {
+      const allAnswers = [...questionsList[0].incorrect_answers,
+        questionsList[0].correct_answer];
+      const randomHelperNumb = 0.5;
+      const shuffle = (arr) => [...arr].sort(() => Math.random() - randomHelperNumb);
+      const random = shuffle(allAnswers);
+      this.setState({
+        questionAnswers: random,
+      });
+    }
   }
 
-  componentDidUpdate(prevProps) {
-    const { timer } = this.props;
+  componentDidUpdate(prevProps, prevState) {
+    const { timer, questions } = this.props;
+    const { index } = this.state;
     const ZERO_SECONDS = 0;
     // const THIRTY_SECONDS = 30;
     if (prevProps.timer !== timer && timer === ZERO_SECONDS) {
       this.setState({
         buttonClicked: true,
+      });
+    }
+    if (prevState.index !== index) {
+      const allAnswers = [...questions[index].incorrect_answers,
+        questions[index].correct_answer];
+      const randomHelperNumb = 0.5;
+      const shuffle = (arr) => [...arr].sort(() => Math.random() - randomHelperNumb);
+      const random = shuffle(allAnswers);
+      this.setState({
+        questionAnswers: random,
       });
     }
   }
@@ -108,12 +130,12 @@ class Game extends React.Component {
         {!loading
       && (
         questions.map((question, indexQuestion) => {
-          const allAnswers = [...question.incorrect_answers, question.correct_answer];
-          const randomHelperNumb = 0.5;
-          const shuffle = (arr) => [...arr].sort(() => Math.random() - randomHelperNumb);
-          const random = shuffle(allAnswers);
-          const { index } = this.state;
-          if (indexQuestion === index) {
+          // const allAnswers = [...question.incorrect_answers, question.correct_answer];
+          // const randomHelperNumb = 0.5;
+          // const shuffle = (arr) => [...arr].sort(() => Math.random() - randomHelperNumb);
+          // const random = shuffle(allAnswers);
+          const { index, questionAnswers } = this.state;
+          if (indexQuestion === index && questionAnswers.length > 0) {
             return (
               <div key={ indexQuestion }>
                 <div data-testid="question-category">
@@ -124,7 +146,7 @@ class Game extends React.Component {
                     {question.question}
                   </div>
                   <div data-testid="answer-options">
-                    {random.map((ans, indexAnswer) => (
+                    {questionAnswers.map((ans, indexAnswer) => (
                       ans === question.correct_answer
                         ? (
                           <button

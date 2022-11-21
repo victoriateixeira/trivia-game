@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import md5 from 'crypto-js/md5';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import { actionCreator, RESET_SCORE } from '../redux/actions';
 
 class Feedback extends React.Component {
   componentDidMount() {
@@ -20,8 +21,20 @@ class Feedback extends React.Component {
     return `https://www.gravatar.com/avatar/${gravatar}`;
   };
 
+  handlePlayAgain = () => {
+    const { dispatch, history } = this.props;
+    history.push('/');
+    dispatch(actionCreator(RESET_SCORE, 0));
+  };
+
+  handleRankingClick = () => {
+    const { dispatch, history } = this.props;
+    history.push('/ranking');
+    dispatch(actionCreator(RESET_SCORE, 0));
+  };
+
   render() {
-    const { assertions, score, history } = this.props;
+    const { assertions, score } = this.props;
     const tres = 3;
     return (
       <>
@@ -34,7 +47,8 @@ class Feedback extends React.Component {
           {' '}
           <span data-testid="feedback-total-question">{assertions}</span>
           {' '}
-          questions right!
+          {assertions === 1 ? 'question right!' : 'questions right!'}
+
         </span>
         <br />
         <span>
@@ -44,14 +58,14 @@ class Feedback extends React.Component {
         </span>
         <button
           type="button"
-          onClick={ () => history.push('/') }
+          onClick={ this.handlePlayAgain }
           data-testid="btn-play-again"
         >
           Play Again
         </button>
         <button
           type="button"
-          onClick={ () => history.push('/ranking') }
+          onClick={ this.handleRankingClick }
           data-testid="btn-ranking"
         >
           Ranking
@@ -63,6 +77,7 @@ class Feedback extends React.Component {
 Feedback.propTypes = {
   score: PropTypes.number.isRequired,
   assertions: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
